@@ -1,38 +1,28 @@
-var socket;
-var ball_element;
 
 $(document).ready(function(){    
-    socket = io();
-    socket.on('mouse', updatePicture);
-    ball_element = document.getElementById('ball');
+
+
+
 });
 
-function updatePicture(e){
-    ball_element.style.top = (Math.floor(window.innerHeight*e.y)-10).toString() + "px";
-    ball_element.style.left = (Math.floor(window.innerWidth*e.x)-10).toString() + "px";
-}
 
-function mouseUpdate(e){
-    var data = {
-        x: e.clientX/window.innerWidth,
-        y: e.clientY/window.innerHeight
-    };
-    socket.emit('mouse', data);
-}
+function createLobby(){
+    document.getElementById("page-landing").style.display="none";
+    document.getElementById("page-lobby").style.display="flex";
 
+    var lobby_id = Math.floor(Math.random()*10000);
+    document.getElementById("lobby-label").innerHTML = lobby_id;
 
-
-
-function activateThing(){
-    document.onmousemove = mouseUpdate;
+    
+    //document.getElementById("lobby-list").insertAdjacentHTML('beforeend', )
+    
 }
 
 
 
-/*
 // SAMPLE GET REQUEST:
-
-queryGET('/query_get', res=>{
+/*
+function queryPOST(url, successCallback, errorCallback){
     console.log("GET successful:");
     console.log(res);
 }, err=>{
@@ -49,7 +39,6 @@ queryPOST('/query_post', {name: "Mazin Abubeker", age: 22}, res=>{
     console.log("Error:");
     console.log(err);
 });
-
 */
 
 function queryPOST(url, query, successCallback, errorCallback){
