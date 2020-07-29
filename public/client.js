@@ -9,23 +9,26 @@ $(document).ready(function(){
 
 
 function createLobby(){
-
-    // document.getElementById("page-landing").style.display="none";
-    // document.getElementById("page-lobby").style.display="flex";
-
-    // var lobby_id = Math.floor(Math.random()*10000);
-    // document.getElementById("lobby-label").innerHTML = lobby_id;
-    // var lobby_user = `<div class="user">` + document.getElementById("username-field").value + `</div>`;
-
-
-    
-    // document.getElementById("lobby-list").insertAdjacentHTML("afterbegin", lobby_user)
-
+    var lobby_id;
     do{
-        var lobby_id = Math.floor(Math.random()*10000);
-    }while();
-    
+        lobby_id = Math.floor(Math.random()*10000);
+        var status_response;
+        queryPOST('/create_lobby', lobby_id, res=>{
+            console.log("GET successful:");
+            console.log(res);
+            status_response = res;
+        }, err=>{
+            console.log("Error:");
+            console.log(err);
+        });
+    }while(!status_response);
+    document.getElementById("page-landing").style.display="none";
+    document.getElementById("page-lobby").style.display="flex";
+    document.getElementById("lobby-label").innerHTML = lobby_id;
 
+
+    var lobby_user = `<div class="user">` + document.getElementById("username-field").value + `</div>`;
+    document.getElementById("lobby-list").insertAdjacentHTML("afterbegin", lobby_user);
 
 }
 
@@ -38,7 +41,7 @@ function joinLobby(){
 
 // SAMPLE GET REQUEST:
 /*
-function queryPOST(url, successCallback, errorCallback){
+queryPOST(url, res=>{
     console.log("GET successful:");
     console.log(res);
 }, err=>{
@@ -57,17 +60,19 @@ queryPOST('/query_post', {name: "Mazin Abubeker", age: 22}, res=>{
 });
 */
 
+
+
 function queryPOST(url, query, successCallback, errorCallback){
     const options = {method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(query)
+                    body: query.toString()
                 };
     fetch(url, options)
     .then(resp => resp.text())
-    .then(json=>{
-        successCallback(JSON.parse(json));
+    .then(res=>{
+        successCallback(res);
     })
     .then(err=>{
         if(err){
@@ -75,6 +80,8 @@ function queryPOST(url, query, successCallback, errorCallback){
         }
     });
 }
+
+
 
 function queryGET(url, successCallback, errorCallback){
     const options = {method: 'GET',

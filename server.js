@@ -13,10 +13,15 @@ app.use(express.json({limit: '1mb'}));
 var users = {};
 
 app.post('/create_lobby', (req, res) => {
-
-  
-
-  res.send();
+  if(users[req]){
+    res.send("false");
+    console.log("EXISTS")
+  }else{
+    users[req] = [];
+    res.send("true");
+    console.log("DOESNT EXIST")
+    console.log(users);
+  }
   res.end();
 });  
 
