@@ -106,6 +106,6 @@ p{
     line-height: 25px;
 }
 
-/* #page-join{
-
-} */
+#page-join{
+    display: none;
+}

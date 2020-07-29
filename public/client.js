@@ -25,7 +25,7 @@ function createLobby(){
 
 function joinLobby(){
     document.getElementById("page-landing").style.display="none";
-    document.getElementById("page-join").style.display="flex";
+    // document.getElementById("page-join").style.display="flex";
 }
 
 
