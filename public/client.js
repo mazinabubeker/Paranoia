@@ -20,6 +20,8 @@ function createLobby(){
         }, err=>{
             console.log("Error:");
             console.log(err);
+        }).then(function(val){
+            console.log("hello" +  val);
         });
     }while(!status_response);
     document.getElementById("page-landing").style.display="none";
