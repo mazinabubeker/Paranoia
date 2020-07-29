@@ -1,22 +1,16 @@
 
 // socket.broadcast.emit('event', data)
 // socket.on('event', data)
-
 var express = require('express');
 var socket = require('socket.io');
+var io = socket(server);
+io.sockets.on('connection', newConnection)
 var app = express();
 var server = app.listen(process.env.PORT || 3000);
 app.use(express.static('public'));
-app.use(express.json({limit: '1mb'}));
 
 
 var users = {};
-
-
-
-
-var io = socket(server);
-io.sockets.on('connection', newConnection)
 
 function newConnection(socket){
   console.log("Connected: " + socket.id);
@@ -27,34 +21,8 @@ function newConnection(socket){
       socket.emit('check_lobby_response', false);
     }else{
       users[id] = [];
-      console.log("lobby created");
+      console.log("Lobby " + id + " created.");
       socket.emit('check_lobby_response', true);
     }
   }
 }
-
-// app.post('/query_post', (req, res) => {
-//   res.send(req.body);
-//   res.end();
-// });  
-
-// app.get('/query_get', (req, res) => {
-//   res.send(nextFlashTime.toString());
-//   res.end();
-// });
-
-
-// app.post('/create_lobby', (req, res) => {
-//   let rd = JSON.parse(req).data
-  
-//   if(users[rd]){
-//     res.send("false");
-//     console.log("EXISTS")
-//   }else{
-//     users[rd] = [];
-//     res.send("true");
-//     console.log("DOESNT EXIST")
-//     console.log(users);
-//   }
-//   res.end();
-// });  
