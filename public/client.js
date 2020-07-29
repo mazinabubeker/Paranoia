@@ -1,36 +1,46 @@
 // socket.emit('event', data)
 // socket.on('event', data)
 
+// const { query } = require("express");
+
 
 var socket;
 $(document).ready(function(){    
     socket = io();
+    socket.on('check_lobby_response', lobbyCreationAttempt)
 });
 
+function lobbyCreationAttempt(val){
+    console.log("Server responded with: ");
+    console.log(val);
+    if(val){
+        document.getElementById("page-landing").style.display="none";
+        document.getElementById("page-lobby").style.display="flex";
+        document.getElementById("lobby-label").innerHTML = lobby_id;
+
+        var lobby_user = `<div class="user">` + document.getElementById("username-field").value + `</div>`;
+        document.getElementById("lobby-list").insertAdjacentHTML("afterbegin", lobby_user);
+    }else{
+        createLobby();
+    }
+}
 
 function createLobby(){
     var lobby_id;
-    do{
-        lobby_id = Math.floor(Math.random()*10000);
-        var status_response;
-        queryPOST('/create_lobby', lobby_id, res=>{
-            console.log("GET successful:");
-            console.log(res);
-            status_response = res;
-        }, err=>{
-            console.log("Error:");
-            console.log(err);
-        }).then(function(val){
-            console.log("hello" +  val);
-        });
-    }while(!status_response);
-    document.getElementById("page-landing").style.display="none";
-    document.getElementById("page-lobby").style.display="flex";
-    document.getElementById("lobby-label").innerHTML = lobby_id;
+    lobby_id = Math.floor(Math.random()*9000+1000);
+    socket.emit('create_lobby', lobby_id);
 
-
-    var lobby_user = `<div class="user">` + document.getElementById("username-field").value + `</div>`;
-    document.getElementById("lobby-list").insertAdjacentHTML("afterbegin", lobby_user);
+        // queryPOST('/create_lobby', {data: lobby_id}, res=>{
+        //     console.log("GET successful:");
+        //     console.log(res);
+        //     status_response = res;
+        // }, err=>{
+        //     console.log("Error:");
+        //     console.log(err);
+        // }).then(function(val){
+        //     console.log("hello" +  val);
+        // });
+    
 
 }
 
@@ -69,12 +79,12 @@ function queryPOST(url, query, successCallback, errorCallback){
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: query.toString()
+                    body: JSON.stringify(query)
                 };
     fetch(url, options)
     .then(resp => resp.text())
     .then(res=>{
-        successCallback(res);
+        successCallback(JSON.parse(res));
     })
     .then(err=>{
         if(err){

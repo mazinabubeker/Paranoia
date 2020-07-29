@@ -12,18 +12,7 @@ app.use(express.json({limit: '1mb'}));
 
 var users = {};
 
-app.post('/create_lobby', (req, res) => {
-  if(users[req]){
-    res.send("false");
-    console.log("EXISTS")
-  }else{
-    users[req] = [];
-    res.send("true");
-    console.log("DOESNT EXIST")
-    console.log(users);
-  }
-  res.end();
-});  
+
 
 
 var io = socket(server);
@@ -31,6 +20,17 @@ io.sockets.on('connection', newConnection)
 
 function newConnection(socket){
   console.log("Connected: " + socket.id);
+  socket.on('create_lobby', checkLobby);
+  function checkLobby(id){
+    if(users[id]){
+      console.log("lobby already exists");
+      socket.emit('check_lobby_response', false);
+    }else{
+      users[id] = [];
+      console.log("lobby created");
+      socket.emit('check_lobby_response', true);
+    }
+  }
 }
 
 // app.post('/query_post', (req, res) => {
@@ -42,3 +42,19 @@ function newConnection(socket){
 //   res.send(nextFlashTime.toString());
 //   res.end();
 // });
+
+
+// app.post('/create_lobby', (req, res) => {
+//   let rd = JSON.parse(req).data
+  
+//   if(users[rd]){
+//     res.send("false");
+//     console.log("EXISTS")
+//   }else{
+//     users[rd] = [];
+//     res.send("true");
+//     console.log("DOESNT EXIST")
+//     console.log(users);
+//   }
+//   res.end();
+// });  
