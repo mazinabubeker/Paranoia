@@ -10,22 +10,28 @@ $(document).ready(function(){
 
 function createLobby(){
 
-    document.getElementById("page-landing").style.display="none";
-    document.getElementById("page-lobby").style.display="flex";
+    // document.getElementById("page-landing").style.display="none";
+    // document.getElementById("page-lobby").style.display="flex";
 
-    var lobby_id = Math.floor(Math.random()*10000);
-    document.getElementById("lobby-label").innerHTML = lobby_id;
-    var lobby_user = `<div class="user">` + document.getElementById("username-field").value + `</div>`;
+    // var lobby_id = Math.floor(Math.random()*10000);
+    // document.getElementById("lobby-label").innerHTML = lobby_id;
+    // var lobby_user = `<div class="user">` + document.getElementById("username-field").value + `</div>`;
 
 
     
-    document.getElementById("lobby-list").insertAdjacentHTML("afterbegin", lobby_user)
+    // document.getElementById("lobby-list").insertAdjacentHTML("afterbegin", lobby_user)
+
+    do{
+        var lobby_id = Math.floor(Math.random()*10000);
+    }while();
     
+
+
 }
 
 function joinLobby(){
     document.getElementById("page-landing").style.display="none";
-    // document.getElementById("page-join").style.display="flex";
+    document.getElementById("page-join").style.display="flex";
 }
 
 
