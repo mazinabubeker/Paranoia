@@ -97,3 +97,15 @@ p{
     height: 350px;
     border: black 2px solid;
 }
+
+.lobby-user{
+    width: 100%;
+    height: 25px;
+    border: 1px solid black;
+    text-align: center;
+    line-height: 25px;
+}
+
+/* #page-join{
+
+} */

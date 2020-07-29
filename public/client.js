@@ -1,21 +1,31 @@
+// socket.emit('event', data)
+// socket.on('event', data)
 
+
+var socket;
 $(document).ready(function(){    
-
-
-
+    socket = io();
 });
 
 
 function createLobby(){
+
     document.getElementById("page-landing").style.display="none";
     document.getElementById("page-lobby").style.display="flex";
 
     var lobby_id = Math.floor(Math.random()*10000);
     document.getElementById("lobby-label").innerHTML = lobby_id;
+    var lobby_user = `<div class="user">` + document.getElementById("username-field").value + `</div>`;
+
 
     
-    //document.getElementById("lobby-list").insertAdjacentHTML('beforeend', )
+    document.getElementById("lobby-list").insertAdjacentHTML("afterbegin", lobby_user)
     
+}
+
+function joinLobby(){
+    document.getElementById("page-landing").style.display="none";
+    document.getElementById("page-join").style.display="flex";
 }
 
 
