@@ -95,6 +95,7 @@ p{
     width: 180px;
     height: 350px;
     border: black 2px solid;
+    margin: 10px 0;
 }
 
 .lobby-user{

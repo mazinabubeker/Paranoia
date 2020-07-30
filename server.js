@@ -28,6 +28,7 @@ function newConnection(socket){
     if(users[data.data2].includes(data.data1)){
       socket.emit('username_attempt', false)
     }else{
+      users[data.data2].push(data.data1);
       socket.to(data.data2).emit('user_add', data.data1);
       socket.emit('username_attempt', true)
     }
@@ -40,6 +41,10 @@ function newConnection(socket){
     }else{
       socket.emit('check_join_response', false);
     }
+  });
+
+  socket.on('get_current_users', lobbyId=>{
+    socket.emit('get_current_users_response', users[lobbyId]);
   });
 }
 

@@ -14,9 +14,16 @@ function joinLobbyAttempt(val){
     console.log("Server responded with: ");
     console.log(val);
     if(val){
-        document.getElementById("page-landing").style.display="none";
-        document.getElementById("page-lobby").style.display="flex";
+        document.getElementById("page-join").style.display="none";
         document.getElementById("lobby-label").innerHTML = lobby_id;
+        socket.emit('get_current_users', lobby_id);
+        socket.on('get_current_users_response', allUsers=>{
+            for(var i = 0; i < allUsers.length; i++){
+                addUserToLobby(allUsers[i]);
+            }
+            document.getElementById("page-lobby").style.display="flex";
+        });
+        
 
         //  Entering name
         document.getElementById('username-field').addEventListener('keypress', e=>{
@@ -28,7 +35,9 @@ function joinLobbyAttempt(val){
 
         socket.on('username_attempt', nameAvailable=>{
             if(nameAvailable){
-                addUserToLobby(newname);
+                document.getElementById('username-field').style.display = "none";
+                addUserToLobby(name);
+                
             }else{
                 alert('Name already taken bozo');
             }
@@ -62,6 +71,7 @@ function lobbyCreationAttempt(val){
 
         socket.on('username_attempt', nameAvailable=>{
             if(nameAvailable){
+                document.getElementById('username-field').style.display = "none";
                 addUserToLobby(name);
             }else{
                 alert('Name already taken bozo');
@@ -91,8 +101,9 @@ function joinLobby(){
     document.getElementById("page-landing").style.display="none";
     document.getElementById("page-join").style.display="flex";
     document.getElementById('gamecode-field').addEventListener('keypress', e=>{
-        if(window.event.keyCode==13){}else{return;}
-        if(document.getElementById('gamecode-field').value==''){return;}
+        if(window.event.keyCode==13){e.preventDefault()}else{return;}
+        if(document.getElementById('gamecode-field').value==''){alert('Invalid lobby ID.');return;}
+        lobby_id = document.getElementById('gamecode-field').value;
         socket.emit('join_lobby', document.getElementById('gamecode-field').value)
     });
 }
