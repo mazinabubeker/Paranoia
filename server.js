@@ -19,7 +19,26 @@ function newConnection(socket){
     }else{
       users[id] = [];
       console.log("Lobby " + id + " created.");
+      socket.join(id);
       socket.emit('check_lobby_response', true);
+    }
+  });
+
+  socket.on('add_user', data=>{
+    if(users[data.data2].includes(data.data1)){
+      socket.emit('username_attempt', false)
+    }else{
+      socket.to(data.data2).emit('user_add', data.data1);
+      socket.emit('username_attempt', true)
+    }
+  });
+
+   socket.on('join_lobby', id=>{
+    if(users[id]){
+      socket.join(id);
+      socket.emit('check_join_response', true);
+    }else{
+      socket.emit('check_join_response', false);
     }
   });
 }
