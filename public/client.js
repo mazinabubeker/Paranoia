@@ -1,6 +1,8 @@
 // socket.emit('event', data)
 // socket.on('event', data)
 
+var numUsers = 0;
+var isHost = false;
 var socket;
 var lobby_id;
 var name;
@@ -61,6 +63,9 @@ function lobbyCreationAttempt(val){
         document.getElementById("page-lobby").style.display="flex";
         document.getElementById("lobby-label").innerHTML = lobby_id;
 
+        isHost = true;
+
+    
         //  Entering name
         document.getElementById('username-field').addEventListener('keypress', e=>{
             if(window.event.keyCode==13){}else{return;}
@@ -87,9 +92,21 @@ function lobbyCreationAttempt(val){
     }
 }
 
+function startGame(){
+    
+}
+
 function addUserToLobby(newname){
+    numUsers++;
+    if(numUsers >= 3 && isHost){
+        var start_btn = `<div class="button" onclick="startGame()" id="start-button">START GAME</div>`;
+        document.getElementById("lobby-label").insertAdjacentHTML("beforebegin", start_btn);
+    
+    }
     var lobby_user = `<div class="lobby-user">` + newname + `</div>`;
     document.getElementById("lobby-list").insertAdjacentHTML("afterbegin", lobby_user);
+
+
 }
 
 function createLobby(){
