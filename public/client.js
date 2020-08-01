@@ -25,6 +25,8 @@ function joinLobbyAttempt(val){
             }
             document.getElementById("page-lobby").style.display="flex";
         });
+
+        socket.on('start_game_response', startGame);
         
 
         //  Entering name
@@ -92,14 +94,17 @@ function lobbyCreationAttempt(val){
     }
 }
 
-function startGame(){
-    
+function endLobby(){
+    socket.emit('start_game', lobby_id);
+    document.querySelector('html').style.display = 'none';
+    document.querySelector('body').innerHTML = '';
+    startGame();
 }
 
 function addUserToLobby(newname){
     numUsers++;
-    if(numUsers >= 3 && isHost){
-        var start_btn = `<div class="button" onclick="startGame()" id="start-button">START GAME</div>`;
+    if(numUsers >= 3 && isHost && !(document.getElementById('start-button'))){
+        var start_btn = `<div class="button" onclick="endLobby()" id="start-button">START GAME</div>`;
         document.getElementById("lobby-label").insertAdjacentHTML("beforebegin", start_btn);
     
     }
@@ -121,6 +126,7 @@ function joinLobby(){
         if(window.event.keyCode==13){e.preventDefault()}else{return;}
         if(document.getElementById('gamecode-field').value==''){alert('Invalid lobby ID.');return;}
         lobby_id = document.getElementById('gamecode-field').value;
-        socket.emit('join_lobby', document.getElementById('gamecode-field').value)
+        socket.emit('join_lobby', lobby_id)
+        document.getElementById('gamecode-field').value='';
     });
 }

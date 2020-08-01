@@ -24,6 +24,10 @@ function newConnection(socket){
     }
   });
 
+  socket.on('start_game', code=>{
+    socket.to(code).emit('start_game_response', 0);
+  });
+
   socket.on('add_user', data=>{
     if(users[data.data2].includes(data.data1)){
       socket.emit('username_attempt', false)
