@@ -1,4 +1,5 @@
 html, body{
+    font-family: "Futura";
     height: 100%;
     margin: 0;
     padding: 0;
@@ -188,6 +189,21 @@ p{
 }
 
 #page-game {
+    flex-direction: column;
+    display: flex;
     width: 100%;
     height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+#asker-name {
+    line-height: 10px;
+    font-family: "Futura";
+    text-align: center;
+}
+
+#is-asking {
+    color: white;
+    font-size: 16px;
 }

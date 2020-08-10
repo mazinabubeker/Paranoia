@@ -1,5 +1,5 @@
 var chosenName;
-
+var isAsking = "<span id='is-asking'><br>IS ASKING A QUESTION...</span>";
 function startGame(){
     queryGET('/game', res=>{
         document.body.innerHTML = res;
@@ -20,12 +20,14 @@ function brrrrt(count, curve){
     setTimeout(() => {
         if(curve >= 400)
         {
-            document.getElementById('page-game').innerHTML = chosenName;
-            document.getElementById('page-game').style.color = 'blue';
+            document.getElementById('asker-name').innerHTML = chosenName + isAsking;
+            document.getElementById('asker-name').style.color = 'blue';
+            document.getElementById('is-asking').style.color = 'blue';
+
             setTimeout(askQuestion, 1000);
             return;
         }
-        document.getElementById('page-game').innerHTML = members[count % members.length];
+        document.getElementById('asker-name').innerHTML = members[count % members.length] + isAsking;
         document.body.style.fontSize = '100px';
         
         brrrrt(++count, curve*1.1);
