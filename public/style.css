@@ -4,6 +4,10 @@ html, body{
     padding: 0;
 }
 
+*{
+    font-style: italic;
+}
+
 #title{
     animation: titleTween 2s ease-in-out forwards;
     height: 50px;
@@ -71,6 +75,18 @@ p{
         opacity: 1;
     }
 }
+
+@keyframes slideIn{
+    0%{
+        opacity: 0;
+        top: -30px;
+    }
+    100%{
+        opacity: 1;
+        top: 0px;
+    }
+}
+
 .button:hover{
     cursor: pointer;
     color: white;
@@ -94,16 +110,22 @@ p{
 #lobby-list{
     width: 180px;
     height: 350px;
-    border: black 2px solid;
     margin: 10px 0;
 }
 
 .lobby-user{
+    margin-bottom: 15px;
     width: 100%;
-    height: 25px;
-    border: 1px solid black;
+    /* height: 25px; */
+    /* border: 1px solid black; */
     text-align: center;
-    line-height: 25px;
+    line-height: 50px;
+    box-shadow: 0 10px 20px 2px rgba(0,0,0,0.15);
+}
+
+.lobby-user:hover{
+    background-color: white;
+    color: black;
 }
 
 #page-join{
@@ -146,4 +168,27 @@ p{
     line-height: 50px;
     margin-bottom: 15px;
     border: black;
+}
+
+#lobby-label {
+    display: block;
+    margin: 15px auto;
+    border: none;
+    padding: 0;
+    width: 6ch;
+    background: repeating-linear-gradient(90deg, dimgrey 0, dimgrey 1ch, transparent 0, transparent 1.5ch) 0 100%/ 10ch 2px no-repeat;
+    font: 5ch droid sans mono, consolas, monospace;
+    letter-spacing: 0.5ch;
+  }
+
+#username-field {
+    border: none;
+    font-family: "Futura";
+    font-size: 26px;
+}
+
+#page-game {
+    display: none;
+    width: 100%;
+    height: 100%;
 }

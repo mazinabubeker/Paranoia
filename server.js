@@ -4,9 +4,14 @@ var express = require('express');
 var socket = require('socket.io');
 var app = express();
 var server = app.listen(process.env.PORT || 3000);
-app.use(express.static('public'));
+app.use(express.static('public'))
+.set('views', 'views')
+.set('view engine', 'ejs')
+.get('/', (req, res) => res.render('pages/index'))
+// .get('/game', (req, res) => res.render('pages/game'));
 var io = socket(server);
 io.sockets.on('connection', newConnection);
+
 
 var users = {};
 
@@ -25,7 +30,7 @@ function newConnection(socket){
   });
 
   socket.on('start_game', code=>{
-    socket.to(code).emit('start_game_response', 0);
+    io.in(code).emit('populate_game', users[code])
   });
 
   socket.on('add_user', data=>{
@@ -49,6 +54,10 @@ function newConnection(socket){
 
   socket.on('get_current_users', lobbyId=>{
     socket.emit('get_current_users_response', users[lobbyId]);
+  });
+
+  socket.on('get_random_user', (id)=>{
+    io.in(id).emit('random_user_response', users[id][Math.floor(users[id].length * Math.random())])
   });
 }
 

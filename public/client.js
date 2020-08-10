@@ -5,11 +5,16 @@ var numUsers = 0;
 var isHost = false;
 var socket;
 var lobby_id;
-var name;
+var name;   // this client's name
+var members;
 $(document).ready(function(){    
     socket = io();
     socket.on('check_lobby_response', lobbyCreationAttempt)
     socket.on('check_join_response', joinLobbyAttempt)
+    socket.on('populate_game', (memberList)=>{
+        members = memberList;
+        startGame();
+    })
 });
 
 function joinLobbyAttempt(val){
@@ -25,10 +30,9 @@ function joinLobbyAttempt(val){
             }
             document.getElementById("page-lobby").style.display="flex";
         });
-
-        socket.on('start_game_response', startGame);
         
 
+        // document.getElementById('username-field').focus();  //  TODO not working
         //  Entering name
         document.getElementById('username-field').addEventListener('keypress', e=>{
             if(window.event.keyCode==13){}else{return;}
@@ -36,7 +40,6 @@ function joinLobbyAttempt(val){
             name = document.getElementById('username-field').value;
             socket.emit('add_user', {"data1":name, "data2":lobby_id});
         });
-
         socket.on('username_attempt', nameAvailable=>{
             if(nameAvailable){
                 document.getElementById('username-field').style.display = "none";
@@ -56,17 +59,23 @@ function joinLobbyAttempt(val){
     }
 }
 
+// function continueLobby(val){
+
+// }
 
 function lobbyCreationAttempt(val){
     console.log("Server responded with: ");
     console.log(val);
     if(val){
-        document.getElementById("page-landing").style.display="none";
-        document.getElementById("page-lobby").style.display="flex";
+        // document.getElementById("page-landing").style.display="none";
+        // queryGET('/game', res=>{
+        //     document.body.innerHTML = res;
+        //   }, err=>{
+        //     console.log("Error: " + err);
+        //   });
         document.getElementById("lobby-label").innerHTML = lobby_id;
 
         isHost = true;
-
     
         //  Entering name
         document.getElementById('username-field').addEventListener('keypress', e=>{
@@ -98,18 +107,17 @@ function endLobby(){
     socket.emit('start_game', lobby_id);
     document.querySelector('html').style.display = 'none';
     document.querySelector('body').innerHTML = '';
-    startGame();
 }
 
 function addUserToLobby(newname){
     numUsers++;
-    if(numUsers >= 3 && isHost && !(document.getElementById('start-button'))){
+    if(numUsers >= 1 && isHost && !(document.getElementById('start-button'))){
         var start_btn = `<div class="button" onclick="endLobby()" id="start-button">START GAME</div>`;
         document.getElementById("lobby-label").insertAdjacentHTML("beforebegin", start_btn);
     
     }
-    var lobby_user = `<div class="lobby-user">` + newname + `</div>`;
-    document.getElementById("lobby-list").insertAdjacentHTML("afterbegin", lobby_user);
+    var lobby_user = `<div style=" animation: slideIn .2s ease-out forwards;" class="lobby-user button">` + newname + `</div>`;
+    document.getElementById("lobby-list").insertAdjacentHTML("beforeend", lobby_user);
 
 
 }
@@ -130,3 +138,29 @@ function joinLobby(){
         document.getElementById('gamecode-field').value='';
     });
 }
+
+/** TO CHANGE PAGE
+  queryGET('/game', res=>{
+  document.body.innerHTML = res;
+}, err=>{
+  console.log("Error: " + err);
+});
+ */
+
+function queryGET(url, successCallback, errorCallback){
+    const options = {method: 'GET',
+                    headers: {
+                        'Content-Type': 'html/text'
+                    },
+                };
+    fetch(url, options)
+    .then(resp => resp.text())
+    .then(text=>{
+        successCallback(text);
+    })
+    .then(err=>{
+        if(err){
+            errorCallback(err);
+        }
+    });
+  }
