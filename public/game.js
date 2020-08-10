@@ -1,15 +1,19 @@
 var chosenName;
 
 function startGame(){
-    document.querySelector('html').style.display = 'block';
-    document.getElementById('page-game').style.display = 'block';
-    if(isHost){
-        socket.emit('get_random_user', lobby_id);
-    }
-    socket.on('random_user_response', name=>{
-        chosenName = name;
-        brrrrt(0, 10);
-    });
+    queryGET('/game', res=>{
+        document.body.innerHTML = res;
+        if(isHost){
+            socket.emit('get_random_user', lobby_id);
+        }
+        socket.on('random_user_response', name=>{
+            chosenName = name;
+            brrrrt(0, 10);
+        });
+    
+      }, err=>{
+        console.log("Error: " + err);
+      });
 }
 
 function brrrrt(count, curve){

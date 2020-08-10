@@ -8,7 +8,9 @@ app.use(express.static('public'))
 .set('views', 'views')
 .set('view engine', 'ejs')
 .get('/', (req, res) => res.render('pages/index'))
-// .get('/game', (req, res) => res.render('pages/game'));
+.get('/join', (req, res) => res.render('pages/join'))
+.get('/game', (req, res) => res.render('pages/game'))
+.get('/lobby', (req, res) => res.render('pages/lobby'));
 var io = socket(server);
 io.sockets.on('connection', newConnection);
 

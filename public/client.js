@@ -21,38 +21,42 @@ function joinLobbyAttempt(val){
     console.log("Server responded with: ");
     console.log(val);
     if(val){
-        document.getElementById("page-join").style.display="none";
-        document.getElementById("lobby-label").innerHTML = lobby_id;
-        socket.emit('get_current_users', lobby_id);
-        socket.on('get_current_users_response', allUsers=>{
-            for(var i = 0; i < allUsers.length; i++){
-                addUserToLobby(allUsers[i]);
-            }
-            document.getElementById("page-lobby").style.display="flex";
-        });
-        
-
-        // document.getElementById('username-field').focus();  //  TODO not working
-        //  Entering name
-        document.getElementById('username-field').addEventListener('keypress', e=>{
-            if(window.event.keyCode==13){}else{return;}
-            if(document.getElementById('username-field').value==''){return;}
-            name = document.getElementById('username-field').value;
-            socket.emit('add_user', {"data1":name, "data2":lobby_id});
-        });
-        socket.on('username_attempt', nameAvailable=>{
-            if(nameAvailable){
-                document.getElementById('username-field').style.display = "none";
-                addUserToLobby(name);
-                
-            }else{
-                alert('Name already taken bozo');
-            }
-        })
-
-        socket.on('user_add', newname=>{
-            addUserToLobby(newname);
-        });
+        queryGET('/lobby', res=>{
+            document.body.innerHTML = res;
+            document.getElementById("lobby-label").innerHTML = lobby_id;
+            socket.emit('get_current_users', lobby_id);
+            socket.on('get_current_users_response', allUsers=>{
+                for(var i = 0; i < allUsers.length; i++){
+                    addUserToLobby(allUsers[i]);
+                }
+                document.getElementById("page-lobby").style.display="flex";
+            });
+            
+    
+            // document.getElementById('username-field').focus();  //  TODO not working
+            //  Entering name
+            document.getElementById('username-field').addEventListener('keypress', e=>{
+                if(window.event.keyCode==13){}else{return;}
+                if(document.getElementById('username-field').value==''){return;}
+                name = document.getElementById('username-field').value;
+                socket.emit('add_user', {"data1":name, "data2":lobby_id});
+            });
+            socket.on('username_attempt', nameAvailable=>{
+                if(nameAvailable){
+                    document.getElementById('username-field').style.display = "none";
+                    addUserToLobby(name);
+                    
+                }else{
+                    alert('Name already taken bozo');
+                }
+            })
+    
+            socket.on('user_add', newname=>{
+                addUserToLobby(newname);
+            });    
+          }, err=>{
+            console.log("Error: " + err);
+          });
 
     }else{
         alert('Invalid lobby ID.');
@@ -67,36 +71,37 @@ function lobbyCreationAttempt(val){
     console.log("Server responded with: ");
     console.log(val);
     if(val){
-        // document.getElementById("page-landing").style.display="none";
-        // queryGET('/game', res=>{
-        //     document.body.innerHTML = res;
-        //   }, err=>{
-        //     console.log("Error: " + err);
-        //   });
-        document.getElementById("lobby-label").innerHTML = lobby_id;
+        queryGET('/lobby', res=>{
+            document.body.innerHTML = res;
 
-        isHost = true;
+            document.getElementById("lobby-label").innerHTML = lobby_id;
+
+            isHost = true;
+        
+            //  Entering name
+            document.getElementById('username-field').addEventListener('keypress', e=>{
+                if(window.event.keyCode==13){}else{return;}
+                if(document.getElementById('username-field').value==''){return;}
+                name = document.getElementById('username-field').value;
+                socket.emit('add_user', {"data1":name, "data2":lobby_id});
+            });
     
-        //  Entering name
-        document.getElementById('username-field').addEventListener('keypress', e=>{
-            if(window.event.keyCode==13){}else{return;}
-            if(document.getElementById('username-field').value==''){return;}
-            name = document.getElementById('username-field').value;
-            socket.emit('add_user', {"data1":name, "data2":lobby_id});
-        });
-
-        socket.on('username_attempt', nameAvailable=>{
-            if(nameAvailable){
-                document.getElementById('username-field').style.display = "none";
-                addUserToLobby(name);
-            }else{
-                alert('Name already taken bozo');
-            }
-        })
-
-        socket.on('user_add', newname=>{
-            addUserToLobby(newname);
-        });
+            socket.on('username_attempt', nameAvailable=>{
+                if(nameAvailable){
+                    document.getElementById('username-field').style.display = "none";
+                    addUserToLobby(name);
+                }else{
+                    alert('Name already taken bozo');
+                }
+            })
+    
+            socket.on('user_add', newname=>{
+                addUserToLobby(newname);
+            });
+    
+          }, err=>{
+            console.log("Error: " + err);
+          });
 
     }else{
         createLobby();
@@ -105,8 +110,6 @@ function lobbyCreationAttempt(val){
 
 function endLobby(){
     socket.emit('start_game', lobby_id);
-    document.querySelector('html').style.display = 'none';
-    document.querySelector('body').innerHTML = '';
 }
 
 function addUserToLobby(newname){
@@ -128,15 +131,18 @@ function createLobby(){
 }
 
 function joinLobby(){
-    document.getElementById("page-landing").style.display="none";
-    document.getElementById("page-join").style.display="flex";
-    document.getElementById('gamecode-field').addEventListener('keypress', e=>{
-        if(window.event.keyCode==13){e.preventDefault()}else{return;}
-        if(document.getElementById('gamecode-field').value==''){alert('Invalid lobby ID.');return;}
-        lobby_id = document.getElementById('gamecode-field').value;
-        socket.emit('join_lobby', lobby_id)
-        document.getElementById('gamecode-field').value='';
-    });
+    queryGET('/join', res=>{
+        document.body.innerHTML = res;
+        document.getElementById('gamecode-field').addEventListener('keypress', e=>{
+            if(window.event.keyCode==13){e.preventDefault()}else{return;}
+            if(document.getElementById('gamecode-field').value==''){alert('Invalid lobby ID.');return;}
+            lobby_id = document.getElementById('gamecode-field').value;
+            socket.emit('join_lobby', lobby_id)
+            document.getElementById('gamecode-field').value='';
+        });
+      }, err=>{
+        console.log("Error: " + err);
+      });
 }
 
 /** TO CHANGE PAGE
