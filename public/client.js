@@ -7,7 +7,7 @@ var socket;
 var lobby_id;
 var name;   // this client's name
 var members;
-$(document).ready(function(){    
+// $(document).ready(function(){    
     socket = io();
     socket.on('check_lobby_response', lobbyCreationAttempt)
     socket.on('check_join_response', joinLobbyAttempt)
@@ -15,7 +15,7 @@ $(document).ready(function(){
         members = memberList;
         startGame();
     })
-});
+// });
 
 function joinLobbyAttempt(val){
     console.log("Server responded with: ");
@@ -145,13 +145,7 @@ function joinLobby(){
       });
 }
 
-/** TO CHANGE PAGE
-  queryGET('/game', res=>{
-  document.body.innerHTML = res;
-}, err=>{
-  console.log("Error: " + err);
-});
- */
+
 
 function queryGET(url, successCallback, errorCallback){
     const options = {method: 'GET',

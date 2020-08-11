@@ -1,5 +1,11 @@
-// socket.broadcast.emit('event', data)
-// socket.on('event', data)
+/** TO CHANGE PAGE
+  queryGET('/game', res=>{
+  document.body.innerHTML = res;
+}, err=>{
+  console.log("Error: " + err);
+});
+ */
+
 var express = require('express');
 var socket = require('socket.io');
 var app = express();
@@ -10,7 +16,8 @@ app.use(express.static('public'))
 .get('/', (req, res) => res.render('pages/index'))
 .get('/join', (req, res) => res.render('pages/join'))
 .get('/game', (req, res) => res.render('pages/game'))
-.get('/lobby', (req, res) => res.render('pages/lobby'));
+.get('/lobby', (req, res) => res.render('pages/lobby'))
+.get('/asking', (req, res) => res.render('pages/asking'));
 var io = socket(server);
 io.sockets.on('connection', newConnection);
 
