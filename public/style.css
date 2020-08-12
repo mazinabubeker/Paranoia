@@ -33,6 +33,7 @@ html, body{
     flex-direction: column;
 }
 
+
 @keyframes titleTween{
     25%{top: calc(50% - 25px);
     opacity: 1;}

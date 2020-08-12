@@ -68,5 +68,9 @@ function newConnection(socket){
   socket.on('get_random_user', (id)=>{
     io.in(id).emit('random_user_response', users[id][Math.floor(users[id].length * Math.random())])
   });
+
+  // socket.on('ask_question', (id)=>{
+  //   io.in(id)
+  // });
 }
 

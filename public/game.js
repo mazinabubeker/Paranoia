@@ -3,6 +3,7 @@ socket.on('random_user_response', name=>{
     console.log('before brryt');
     brrrrt(0, 10);
 });
+var question;
 var chosenName;
 var areAsking = "<span id='is-asking'><br>ARE ASKING A QUESTION...</span>";
 var isAsking = "<span id='is-asking'><br>IS ASKING A QUESTION...</span>";
@@ -45,11 +46,30 @@ function brrrrt(count, curve){
 
 function askQuestion(){
     if(name == chosenName){
-        console.log('IM GETTING ASKED WEEE');
+        console.log('IM ASKING WEEE');
         queryGET('/asking', res=>{
             document.body.innerHTML = res;
+            document.getElementById('asking-field').addEventListener('keypress', e=>{
+                if(window.event.keyCode==13){e.preventDefault()}else{return;}
+                if(document.getElementById('asking-field').value==''){alert('Ask a question, fool.');return;}
+                question = document.getElementById('asking-field').value;
+                socket.emit('ask_question', question)
+                document.getElementById('asking-field').value='';
+
+            });
+    
           }, err=>{
             console.log("Error: " + err);
           });
+    }
+}
+
+function askingChoice(shotTaker){
+    if(shotTaker == 1){
+        console.log('i took shot weee');
+        
+        // socket.emit('')
+    }else{
+
     }
 }
