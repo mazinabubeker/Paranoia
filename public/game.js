@@ -30,6 +30,7 @@ function brrrrt(count, curve){
                 document.getElementById('asker-name').innerHTML = chosenName + isAsking;
             }
             document.getElementById('asker-name').style.color = '#7faaff';
+            document.getElementById('is-asking').style.visibility = 'visible';
             document.getElementById('is-asking').style.color = '#7faaff';
             setTimeout(askQuestion, 1800);
             return;

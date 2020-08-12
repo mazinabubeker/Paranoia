@@ -204,7 +204,7 @@ p{
 }
 
 #is-asking {
-    color: white;
+    visibility: hidden;
     font-size: 16px;
 }
 
