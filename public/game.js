@@ -4,6 +4,7 @@ socket.on('random_user_response', name=>{
     brrrrt(0, 10);
 });
 var chosenName;
+var areAsking = "<span id='is-asking'><br>ARE ASKING A QUESTION...</span>";
 var isAsking = "<span id='is-asking'><br>IS ASKING A QUESTION...</span>";
 function startGame(){
     queryGET('/game', res=>{
@@ -23,11 +24,14 @@ function brrrrt(count, curve){
     setTimeout(() => {
         if(curve >= 400)
         {
-            document.getElementById('asker-name').innerHTML = chosenName + isAsking;
+            if(name == chosenName){
+                document.getElementById('asker-name').innerHTML = "YOU" + areAsking;
+            }else{
+                document.getElementById('asker-name').innerHTML = chosenName + isAsking;
+            }
             document.getElementById('asker-name').style.color = '#7faaff';
             document.getElementById('is-asking').style.color = '#7faaff';
-
-            setTimeout(askQuestion, 1000);
+            setTimeout(askQuestion, 1800);
             return;
         }
         document.getElementById('asker-name').innerHTML = members[count % members.length] + isAsking;
