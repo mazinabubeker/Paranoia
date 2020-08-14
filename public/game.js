@@ -37,7 +37,7 @@ function brrrrt(count, curve){
             return;
         }
         document.getElementById('asker-name').innerHTML = members[count % members.length] + isAsking;
-        document.body.style.fontSize = '100px';
+        document.getElementById('asker-name').style.fontSize = '100px';
         
         brrrrt(++count, curve*1.1);
     }, curve);
