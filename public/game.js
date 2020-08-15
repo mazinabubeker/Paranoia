@@ -66,6 +66,10 @@ function askQuestion(){
 
 function askingChoice(shotTaker){
     if(shotTaker == 1){
+        if(document.getElementById('asking-field').value==''){alert('Ask a question, fool.');return;}
+        question = document.getElementById('asking-field').value;
+        socket.emit('ask_question', question)
+        document.getElementById('asking-field').value='';
         console.log('i took shot weee');
         
         // socket.emit('')
