@@ -17,7 +17,9 @@ app.use(express.static('public'))
 .get('/join', (req, res) => res.render('pages/join'))
 .get('/game', (req, res) => res.render('pages/game'))
 .get('/lobby', (req, res) => res.render('pages/lobby'))
-.get('/asking', (req, res) => res.render('pages/asking'));
+.get('/asking', (req, res) => res.render('pages/asking'))
+.get('/choosevictim', (req, res) => res.render('pages/choosevictim'));
+
 var io = socket(server);
 io.sockets.on('connection', newConnection);
 
@@ -64,6 +66,11 @@ function newConnection(socket){
   socket.on('get_current_users', lobbyId=>{
     socket.emit('get_current_users_response', users[lobbyId]);
   });
+
+  socket.on('get_victim_list', lobbyId=>{
+    socket.emit('victim_list_response', users[lobbyId]);
+  });
+
 
   socket.on('get_random_user', (id)=>{
     io.in(id).emit('random_user_response', users[id][Math.floor(users[id].length * Math.random())])

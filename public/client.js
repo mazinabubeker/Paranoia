@@ -18,8 +18,7 @@ var members;
 // });
 
 function joinLobbyAttempt(val){
-    console.log("Server responded with: ");
-    console.log(val);
+    console.log("Server responded with: " + val);
     if(val){
         queryGET('/lobby', res=>{
             document.body.innerHTML = res;
@@ -30,10 +29,9 @@ function joinLobbyAttempt(val){
                     addUserToLobby(allUsers[i]);
                 }
                 document.getElementById("page-lobby").style.display="flex";
+                socket.removeAllListeners('get_current_users_response');
             });
             
-    
-            // document.getElementById('username-field').focus();  //  TODO not working
             //  Entering name
             document.getElementById('username-field').addEventListener('keypress', e=>{
                 if(window.event.keyCode==13){}else{return;}
